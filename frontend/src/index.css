@@ -1,0 +1,78 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg-primary: #0a0e17;
+  --color-bg-secondary: #111827;
+  --color-bg-card: #1a2332;
+  --color-bg-hover: #243044;
+  --color-accent: #10b981;
+  --color-accent-hover: #34d399;
+  --color-danger: #ef4444;
+  --color-warning: #f59e0b;
+  --color-text-primary: #f1f5f9;
+  --color-text-secondary: #94a3b8;
+  --color-text-muted: #64748b;
+  --color-border: #1e293b;
+  --color-border-light: #334155;
+  --color-odds-up: #10b981;
+  --color-odds-down: #ef4444;
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+@layer base {
+  body {
+    @apply bg-bg-primary text-text-primary font-sans antialiased;
+    background-image: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(16, 185, 129, 0.08), transparent);
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--color-bg-primary);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-border-light);
+    border-radius: 3px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-text-muted);
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-accent hover:bg-accent-hover text-bg-primary font-semibold px-6 py-2.5 rounded-lg transition-all duration-200 active:scale-95;
+  }
+
+  .btn-secondary {
+    @apply bg-bg-card hover:bg-bg-hover text-text-primary font-medium px-6 py-2.5 rounded-lg border border-border-light transition-all duration-200;
+  }
+
+  .btn-danger {
+    @apply bg-danger/20 hover:bg-danger/30 text-danger font-medium px-6 py-2.5 rounded-lg transition-all duration-200;
+  }
+
+  .card {
+    @apply bg-bg-card rounded-xl border border-border p-5 backdrop-blur-sm;
+  }
+
+  .input-field {
+    @apply w-full bg-bg-secondary border border-border-light rounded-lg px-4 py-2.5 text-text-primary placeholder-text-muted focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent/30 transition-all;
+  }
+
+  .odds-badge-default {
+    @apply px-3 py-1.5 rounded-lg font-semibold text-sm cursor-pointer transition-all duration-200 border bg-bg-secondary border-border-light text-text-primary hover:bg-accent/10 hover:border-accent/30 hover:text-accent;
+  }
+
+  .odds-badge-selected {
+    @apply px-3 py-1.5 rounded-lg font-semibold text-sm cursor-pointer transition-all duration-200 border bg-accent/20 border-accent text-accent;
+  }
+
+  .glass {
+    @apply bg-bg-card/80 backdrop-blur-xl border border-border/50;
+  }
+}

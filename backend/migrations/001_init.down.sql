@@ -1,0 +1,25 @@
+-- Rollback initial schema
+
+DROP TRIGGER IF EXISTS trg_odds_history ON odds;
+DROP TRIGGER IF EXISTS trg_odds_updated_at ON odds;
+DROP TRIGGER IF EXISTS trg_markets_updated_at ON markets;
+DROP TRIGGER IF EXISTS trg_events_updated_at ON events;
+DROP TRIGGER IF EXISTS trg_users_updated_at ON users;
+
+DROP FUNCTION IF EXISTS log_odds_change();
+DROP FUNCTION IF EXISTS update_updated_at();
+
+DROP TABLE IF EXISTS admin_logs CASCADE;
+DROP TABLE IF EXISTS odds_history CASCADE;
+DROP TABLE IF EXISTS transactions CASCADE;
+DROP TABLE IF EXISTS bet_legs CASCADE;
+DROP TABLE IF EXISTS bets CASCADE;
+DROP TABLE IF EXISTS market_pools CASCADE;
+DROP TABLE IF EXISTS odds CASCADE;
+DROP TABLE IF EXISTS markets CASCADE;
+DROP TABLE IF EXISTS events CASCADE;
+DROP TABLE IF EXISTS sports CASCADE;
+DROP TABLE IF EXISTS users CASCADE;
+DROP TABLE IF EXISTS schema_migrations CASCADE;
+
+DROP EXTENSION IF EXISTS "uuid-ossp";

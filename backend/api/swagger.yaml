@@ -1,0 +1,102 @@
+openapi: 3.0.0
+info:
+  title: BetKZ API
+  version: 1.0.0
+  description: Full API for BetKZ sportsbook
+
+servers:
+  - url: http://localhost:8080
+
+paths:
+  /users:
+    post:
+      summary: Create user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/UserCreate" }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/User" }
+
+    get:
+      summary: Get all users
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/User" }
+
+  /events:
+    get:
+      summary: List events
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/Event" }
+
+
+  /bets:
+    get:
+      summary: Get all bets
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/Bet" }
+
+
+
+components:
+  schemas:
+    UserCreate:
+      type: object
+      required: [email, balance]
+      properties:
+        email: { type: string }
+        balance: { type: number }
+
+    User:
+      type: object
+      properties:
+        id: { type: integer }
+        email: { type: string }
+        balance: { type: number }
+
+    Event:
+      type: object
+      properties:
+        id: { type: integer }
+        name: { type: string }
+        odds: { type: number }
+
+    BetCreate:
+      type: object
+      required: [user_id, event_id, amount]
+      properties:
+        user_id: { type: integer }
+        event_id: { type: integer }
+        amount: { type: number }
+
+    Bet:
+      type: object
+      properties:
+        id: { type: integer }
+        user_id: { type: integer }
+        event_id: { type: integer }
+        amount: { type: number }
+        status: { type: string }

@@ -1,0 +1,30 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  scrape_timeout: 10s
+
+scrape_configs:
+  - job_name: "betkz-backend"
+    metrics_path: /metrics
+    static_configs:
+      - targets: ["backend:8080"]
+
+  - job_name: "betkz-auth-service"
+    metrics_path: /metrics
+    static_configs:
+      - targets: ["auth-service:8001"]
+
+  - job_name: "betkz-user-service"
+    metrics_path: /metrics
+    static_configs:
+      - targets: ["user-service:8002"]
+
+  - job_name: "betkz-order-service"
+    metrics_path: /metrics
+    static_configs:
+      - targets: ["order-service:8003"]
+
+  - job_name: "betkz-chat-service"
+    metrics_path: /metrics
+    static_configs:
+      - targets: ["chat-service:8004"]
