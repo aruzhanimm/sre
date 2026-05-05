@@ -1,0 +1,94 @@
+groups:
+  - name: betkz_service_alerts
+    rules:
+      - alert: OrderServiceHighFailureRate
+        expr: rate(order_service_failures_total[1m]) > 0.1
+        for: 30s
+        labels:
+          severity: critical
+          service: order-service
+        annotations:
+          summary: "Order Service is experiencing high failure rate"
+          description: >
+            order_service_failures_total is increasing at
+            {{ $value | printf "%.2f" }} failures/sec.
+            This may indicate a misconfigured backend URL (as seen in Assignment 4 incident).
+
+      - alert: OrderServiceHighLatency
+        expr: >
+          histogram_quantile(0.95,
+            rate(order_service_request_duration_seconds_bucket[5m])
+          ) > 2.0
+        for: 1m
+        labels:
+          severity: warning
+          service: order-service
+        annotations:
+          summary: "Order Service p95 latency exceeds 2 seconds"
+          description: >
+            95th percentile latency is {{ $value | printf "%.2f" }}s.
+            Investigate backend connectivity and database load.
+
+      - alert: AuthServiceHighFailureRate
+        expr: >
+          rate(auth_service_requests_total{status="503"}[1m]) /
+          (rate(auth_service_requests_total[1m]) + 0.001) > 0.05
+        for: 30s
+        labels:
+          severity: critical
+          service: auth-service
+        annotations:
+          summary: "Auth Service 503 error rate exceeds 5%"
+          description: >
+            {{ $value | printf "%.0f" }}% of auth requests are returning 503.
+            Users cannot log in or register.
+
+      - alert: UserServiceHighFailureRate
+        expr: >
+          rate(user_service_requests_total{status="503"}[1m]) /
+          (rate(user_service_requests_total[1m]) + 0.001) > 0.05
+        for: 30s
+        labels:
+          severity: warning
+          service: user-service
+        annotations:
+          summary: "User Service 503 error rate exceeds 5%"
+          description: >
+            {{ $value | printf "%.0f" }}% of user profile requests are failing.
+
+      - alert: ServiceDown
+        expr: up == 0
+        for: 60s
+        labels:
+          severity: critical
+        annotations:
+          summary: "Service {{ $labels.job }} is DOWN"
+          description: >
+            Prometheus cannot reach {{ $labels.job }}.
+            Container may have crashed or restarted. Check: docker ps -a
+
+  - name: betkz_capacity_alerts
+    rules:
+      - alert: OrderServiceHighRequestRate
+        expr: rate(order_service_requests_total[1m]) > 50
+        for: 2m
+        labels:
+          severity: warning
+          service: order-service
+        annotations:
+          summary: "Order Service request rate is very high"
+          description: >
+            Current RPS: {{ $value | printf "%.1f" }}.
+            Consider horizontal scaling — deploy additional order-service replicas.
+
+      - alert: AuthServiceHighRequestRate
+        expr: rate(auth_service_requests_total[1m]) > 30
+        for: 2m
+        labels:
+          severity: warning
+          service: auth-service
+        annotations:
+          summary: "Auth Service is under heavy load"
+          description: >
+            Auth RPS: {{ $value | printf "%.1f" }}.
+            Token validation load is high — consider caching JWT checks.
